@@ -10,6 +10,7 @@ import { HomeModule } from './home/home.module';
 import { ProductModule } from './product/product.module';
 import { ShellModule } from './shell/shell.module';
 import { ToastrModule } from 'ngx-toastr'
+import { StorageService } from './shared/storage.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import { ToastrModule } from 'ngx-toastr'
     ShellModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [StorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from './product.service';
 import { ToastrService } from 'ngx-toastr';
+import { StorageService } from '../shared/storage.service';
 
 @Component({
   selector: 'app-product',
@@ -14,7 +15,6 @@ export class ProductComponent implements OnInit {
   productDetails: any;
   productList: any[] = [];
   showEmailForm = false;
-  isSubscribed = false;
   emailInput!: string;
   emailError = false;
   subscription! : any;
@@ -22,7 +22,8 @@ export class ProductComponent implements OnInit {
   constructor(private productService: ProductService,
      private route: ActivatedRoute,
      private router: Router,
-     private toastr: ToastrService) { }
+     private toastr: ToastrService,
+     private storage: StorageService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -46,6 +47,9 @@ export class ProductComponent implements OnInit {
       if(data) {
         this.productDetails = data;
         this.getMoreProductList(this.productDetails.category.id);
+
+        // Check whether the there is an active subscribtion
+        this.subscription = this.storage.getSubscription(this.productDetails.id);
       } else {
         this.notFoundError = true;
       }
@@ -80,16 +84,20 @@ export class ProductComponent implements OnInit {
         product: {
           id: this.productDetails.id,
         },
-      }).subscribe((data) => {
+      }).subscribe((data: any) => {
         if(data){
           this.emailError = false;
           this.showEmailForm = false;
-          this.isSubscribed = true;
+          this.subscription = {
+            productId: this.productDetails.id,
+            notificationId: data.id,
+          };
 
           // show notifications
           this.toastr.success('You have subscribed successfully!');
 
-          // store the subscribtions locally
+          // store the subscribtions, locally for the sake of simplilcity
+          this.storage.addSubscription(this.productDetails.id, data.id);
 
         } else {
           // error
@@ -109,18 +117,18 @@ export class ProductComponent implements OnInit {
   }
 
   unsubscribeFromNotification(){
-      this.productService.subscribeToNotification({
-        id: this.subscription.id,
+      this.productService.updateSubscribtion(this.subscription.notificationId, {
         isActive: false,
       }).subscribe((data) => {
         if(data){
-          this.isSubscribed = false;
 
           // show notifications
           this.toastr.success('You have unsubscribed successfully!');
 
-          // store the subscribtions locally
+          // update the subscribtions locally
+          this.storage.removeSubscription(this.subscription.notificationId);
 
+          this.subscription = null;
         } else {
           // error
           this.toastr.error('Oops! we couldn\'t complete the request, please try again');

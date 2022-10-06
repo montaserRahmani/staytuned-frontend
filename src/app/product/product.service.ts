@@ -27,8 +27,8 @@ export class ProductService {
     return this.http.post(this.apiBaseUrl + 'notification', data);
   }
 
-  updateSubscribtion(data: any){
-    return this.http.patch(this.apiBaseUrl + 'notification', data);
+  updateSubscribtion(id: string, data: any){
+    return this.http.put(this.apiBaseUrl + 'notification/' + id, data);
   }
 
 }

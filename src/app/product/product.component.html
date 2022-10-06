@@ -99,13 +99,13 @@
 </section>
 
 <section class="container mx-5">
-  <div class="flex -mt-4" *ngIf="!isSubscribed">
+  <div class="flex -mt-4" *ngIf="!subscription">
     <button (click)="showEmailForm = !showEmailForm"
     class="flex mx-auto text-indigo-500 border border-indigo-500 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-white rounded">Want to get notified about a price drop?</button>
   </div>
 
-  <div class="flex mt-8" *ngIf="isSubscribed">
-    <button
+  <div class="flex mt-8" *ngIf="subscription">
+    <button (click)="unsubscribeFromNotification()"
     class="flex mx-auto text-indigo-500 border border-indigo-500 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-white rounded">Unsubscribe from price updates</button>
   </div>
 
