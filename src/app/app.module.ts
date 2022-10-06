@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -12,9 +13,10 @@ import { ShellModule } from './shell/shell.module';
     AppComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
-    HomeModule,
     ProductModule,
+    HomeModule,
     ShellModule,
     AppRoutingModule
   ],

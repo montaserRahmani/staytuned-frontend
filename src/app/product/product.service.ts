@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +11,8 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  getProductsByCategory(id: string) {
-    return this.http.get(this.apiBaseUrl + 'product?join=category&filter=category.id||$eq||' + id);
+  getProductsByCategory(id: string, limit = 4) {
+    return this.http.get(this.apiBaseUrl + 'product?join=category&filter=category.id||$eq||' + id + '&limit=' + limit);
   }
 
   getProduct(id: string) {
@@ -20,6 +20,6 @@ export class ProductService {
   }
 
   getHomeCategories() {
-    return this.http.get(this.apiBaseUrl + 'category?join=product&filter=isActive||$eq||true&sort=createdAt,DESC');
+    return this.http.get(this.apiBaseUrl + 'category?join=products&filter=isActive||$eq||true&sort=order,ASC');
   }
 }

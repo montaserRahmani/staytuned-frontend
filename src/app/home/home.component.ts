@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProductService } from '../product/product.service';
 
 @Component({
@@ -12,9 +13,10 @@ export class HomeComponent implements OnInit {
   categoryList: any[] = [];
   loading = true;
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, private router: Router) { }
 
   ngOnInit(): void {
+    this.getCategories();
   }
 
   getCategories() {
@@ -25,6 +27,10 @@ export class HomeComponent implements OnInit {
       console.log(err);
       this.loading = false;
     });
+  }
+
+  viewProduct(id: string){
+    this.router.navigate(['/product/' + id]);
   }
 
 }

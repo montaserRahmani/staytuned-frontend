@@ -1,26 +1,31 @@
 
-<section class="text-gray-600 body-font">
+<div class="global-loader" *ngIf="loading">
+  <div style="border-top-color:transparent" class="w-16 h-16 border-4 border-blue-400 border-solid rounded-full animate-spin"></div>
+</div>
+
+<section class="text-gray-600 mb-20 body-font" *ngFor="let category of categoryList">
 
   <div class="container px-5 my-10 mx-auto">
     <div class="flex flex-col text-left w-full">
       <h2 class="text-xs text-indigo-500 tracking-widest font-medium title-font mb-1">Best Sellers</h2>
-      <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Laptops & Tablets</h1>
+      <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">{{category.title}}</h1>
     </div>
   </div>
 
   <div class="container px-5 mx-auto">
-	<div class="flex flex-wrap -m-4">
-	  <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-		<a class="block relative h-48 rounded overflow-hidden">
-		  <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/420x260">
-		</a>
-		<div class="mt-4">
-		  <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">Lapotop</h3>
-		  <h2 class="text-gray-900 title-font text-lg font-medium">Macbook Pro 14 inches 2022</h2>
-		  <p class="mt-1">$999.95</p>
-		</div>
-	  </div>
-	</div>
+    <div class="flex flex-wrap -m-4">
+      <div class="lg:w-1/4 md:w-1/2 p-4 w-full cursor-pointer" *ngFor="let product of category.products" (click)="viewProduct(product.id)">
+        <a class="block relative h-60 rounded overflow-hidden">
+          <img alt="ecommerce" class="object-cover object-center w-full h-full block"
+            [src]="product.image">
+        </a>
+        <div class="mt-4">
+          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{category.title}}</h3>
+          <h2 class="text-gray-900 title-font text-lg font-medium">{{product.title}}</h2>
+          <p class="mt-1 text-indigo-500">${{product.price}}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
