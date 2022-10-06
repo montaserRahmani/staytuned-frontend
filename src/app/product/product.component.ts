@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from './product.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product',
@@ -12,8 +13,16 @@ export class ProductComponent implements OnInit {
   notFoundError = false;
   productDetails: any;
   productList: any[] = [];
+  showEmailForm = false;
+  isSubscribed = false;
+  emailInput!: string;
+  emailError = false;
+  subscription! : any;
 
-  constructor(private productService: ProductService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private productService: ProductService,
+     private route: ActivatedRoute,
+     private router: Router,
+     private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -45,6 +54,7 @@ export class ProductComponent implements OnInit {
     }, (err) => {
       console.log(err);
       this.loading = false;
+      this.toastr.error('Oops! we couldn\'t get the product , please try again');
     });
   }
 
@@ -60,6 +70,67 @@ export class ProductComponent implements OnInit {
 
   viewProduct(id: string){
     this.router.navigate(['/product/' + id]);
+  }
+
+  subscribeToNotification(){
+
+    if(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(this.emailInput)){
+      this.productService.subscribeToNotification({
+        receiverEmail: this.emailInput,
+        product: {
+          id: this.productDetails.id,
+        },
+      }).subscribe((data) => {
+        if(data){
+          this.emailError = false;
+          this.showEmailForm = false;
+          this.isSubscribed = true;
+
+          // show notifications
+          this.toastr.success('You have subscribed successfully!');
+
+          // store the subscribtions locally
+
+        } else {
+          // error
+          this.toastr.error('Oops! we couldn\'t complete the request, please try again');
+        }
+      }, (err) => {
+        console.log(err);
+        this.toastr.error('Oops! we couldn\'t complete the request, please try again');
+      });
+
+      this.showEmailForm = false;
+
+    } else {
+      this.emailError = true;
+    }
+
+  }
+
+  unsubscribeFromNotification(){
+      this.productService.subscribeToNotification({
+        id: this.subscription.id,
+        isActive: false,
+      }).subscribe((data) => {
+        if(data){
+          this.isSubscribed = false;
+
+          // show notifications
+          this.toastr.success('You have unsubscribed successfully!');
+
+          // store the subscribtions locally
+
+        } else {
+          // error
+          this.toastr.error('Oops! we couldn\'t complete the request, please try again');
+        }
+      }, (err) => {
+        console.log(err);
+        this.toastr.error('Oops! we couldn\'t complete the request, please try again');
+      });
+
+      this.showEmailForm = false;
   }
 
 }

@@ -22,4 +22,13 @@ export class ProductService {
   getHomeCategories() {
     return this.http.get(this.apiBaseUrl + 'category?join=products&filter=isActive||$eq||true&sort=order,ASC');
   }
+
+  subscribeToNotification(data: any){
+    return this.http.post(this.apiBaseUrl + 'notification', data);
+  }
+
+  updateSubscribtion(data: any){
+    return this.http.patch(this.apiBaseUrl + 'notification', data);
+  }
+
 }

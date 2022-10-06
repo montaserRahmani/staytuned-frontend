@@ -3,6 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
+// regular style toast
+@import '~ngx-toastr/toastr';
+
 .global-loader {
   position: absolute;
   display: flex;
