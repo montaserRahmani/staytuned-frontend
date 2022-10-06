@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../product/product.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  // For the sake of simplicity we will show latest 2 categories with latest prodcuts
+  categoryList: any[] = [];
+  loading = true;
+
+  constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
+  }
+
+  getCategories() {
+    this.productService.getHomeCategories().subscribe((data: any) => {
+      this.categoryList = data;
+      this.loading = false;
+    }, (err) => {
+      console.log(err);
+      this.loading = false;
+    });
   }
 
 }
