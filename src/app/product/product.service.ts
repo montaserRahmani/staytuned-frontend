@@ -6,29 +6,26 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProductService {
 
-  // Temp
-  private apiBaseUrl = 'http://localhost:3000/';
-
   constructor(private http: HttpClient) { }
 
   getProductsByCategory(id: string, limit = 4) {
-    return this.http.get(this.apiBaseUrl + 'product?join=category&filter=category.id||$eq||' + id + '&limit=' + limit);
+    return this.http.get('product?join=category&filter=category.id||$eq||' + id + '&limit=' + limit);
   }
 
   getProduct(id: string) {
-    return this.http.get(this.apiBaseUrl + 'product/' + id);
+    return this.http.get('product/' + id);
   }
 
   getHomeCategories() {
-    return this.http.get(this.apiBaseUrl + 'category?join=products&filter=isActive||$eq||true&sort=order,ASC');
+    return this.http.get('category?join=products&filter=isActive||$eq||true&sort=order,ASC');
   }
 
   subscribeToNotification(data: any){
-    return this.http.post(this.apiBaseUrl + 'notification', data);
+    return this.http.post('notification', data);
   }
 
   updateSubscribtion(id: string, data: any){
-    return this.http.put(this.apiBaseUrl + 'notification/' + id, data);
+    return this.http.put('notification/' + id, data);
   }
 
 }
